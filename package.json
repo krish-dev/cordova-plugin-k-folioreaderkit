@@ -1,0 +1,16 @@
+{
+	"name": "cordova-plugin-k-folioreaderkit",
+	"version": "0.0.1",
+	"description": "Cordova plugin for view ePub",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/krish-dev/cordova-plugin-k-folioreaderkit.git"
+	},
+	"author": "Krishnendu Sekhar Das",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/krish-dev/cordova-plugin-k-folioreaderkit/issues"
+	},
+	"homepage": "https://github.com/krish-dev/cordova-plugin-k-folioreaderkit#readme"
+}

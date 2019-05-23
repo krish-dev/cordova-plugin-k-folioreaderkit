@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:rim="http://www.blackberry.com/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-k-folioreaderkit"
+    version="0.0.1">
+    <name>KFolioReaderKit</name>
+    <description>Cordova Plugin for FolioReaderKit </description>
+    <license>Apache 2.0</license>
+    <keywords>cordova, ePub, folioreader</keywords>
+
+    <js-module src="www/kfolioreaderkit.js" name="KFolioReaderKit">
+        <clobbers target="KFolioReaderKit"/>
+    </js-module>
+
+	<platform name="ios">
+		<config-file target="config.xml" parent="/*">
+            <feature name="KFolioReaderKit">
+                <param name="ios-package" value="KFolioReaderKit" />
+            </feature>
+        </config-file>
+
+		<podspec>
+			<config>
+				<source url="https://github.com/CocoaPods/Specs.git"/>
+			</config>
+			<pods use-frameworks="true">
+				<pod name="RealmSwift" spec="3.13.1" swift-version="4.2"/>
+				<pod name="FolioReaderKit" spec="1.4.0"/>
+			</pods>
+		</podspec>
+
+        <!-- Add in the plugin .swift files here -->
+        <source-file src="src/ios/KFolioReaderKit.swift" />
+        <!-- Add in the swift-support plugin by default -->
+        <dependency id="cordova-plugin-add-swift-support" version=">=2.0.2" />
+	</platform>
+</plugin>
