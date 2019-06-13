@@ -6,7 +6,16 @@ var exec = require('cordova/exec');
 function KFolioReaderKit() { }
 
 KFolioReaderKit.prototype.open = function (config, successCallback, errorCallback) {
-	exec(successCallback, errorCallback, 'KFolioReaderKit', 'open', [config]);
+	if (config.hasOwnProperty('fileName')) {
+		if (config.hasOwnProperty('subDirOfdocumentDir')) {
+			exec(successCallback, errorCallback, 'KFolioReaderKit', 'open', [config]);
+		} else {
+			config['subDirOfdocumentDir'] = 'NoCloud';
+			exec(successCallback, errorCallback, 'KFolioReaderKit', 'open', [config]);
+		}
+	} else {
+		errorCallback('WRONG_CONFIGURATION');
+	}
 };
 
 module.exports = new KFolioReaderKit();

@@ -1,26 +1,46 @@
+import FolioReaderKit
+
+/* ================================================================================
+ * Developed By     : Krishnendu Sekhar Das
+ * Company          : Indusnet Technologies Pvt. Ltd.
+ * File             : KFolioReaderKit.swift
+ * Description		: This is a Cordova wrapper of Folio Reader Kit Lib
+ ==================================================================================*/
+
 @objc(KFolioReaderKit)
 
 class KFolioReaderKit : CDVPlugin {
 
     @objc func open(_ command: CDVInvokedUrlCommand) {
-		// DispatchQueue.global(qos: .background).async {
-            let config = command.argument(at: 0) as! NSDictionary
-            NSLog("File Name: %@", config.object(forKey: "fileName") as! String)
-            NSLog("Title: %@", config.object(forKey: "title") as! String)
-            NSLog("Current Page Index: %d", config.object(forKey: "currentPage") as! Int)
-            NSLog("Bookmark Message: %@", config.object(forKey: "bookmarkMessage") as! String)
 
-			// Demo
-			NSLog("ePub Location: %@", config.object(forKey: "ePubUrl") as! String)
+        let config = command.argument(at: 0) as! NSDictionary
+        let fileName = config.object(forKey: "fileName") as! String
+		let subDirOfdocumentDir = config.object(forKey: "subDirOfdocumentDir") as! String
 
-//            let ePubPath: String = config.object(forKey: "ePubUrl") as! String
-//        let ePubPath:String = "file:///Users/krish/Library/Developer/CoreSimulator/Devices/0F0CF503-0734-4598-B310-27B370409B7E/data/Containers/Data/Application/89E12ADF-8297-460F-B834-29732FBAE182/Library/NoCloud/half-girl-friend.epub"
-
-//            let folioReaderConfig = FolioReaderConfig()
-
-//            let bookPath = Bundle.main.path(forResource: "half-girl-friend", ofType: "epub")
-//            let folioReader = FolioReader()
-//            folioReader.presentReader(parentViewController: self.viewController, withEpubPath: bookPath!, andConfig: folioReaderConfig)
-//        }
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+        let url = NSURL(fileURLWithPath: path)
+        if let pathComponent = url.appendingPathComponent(subDirOfdocumentDir + "/" + fileName) {
+            let filePath = pathComponent.path
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: filePath) {
+                // Folio Reader configuration.
+                let folioReaderConfig = FolioReaderConfig()
+                folioReaderConfig.allowSharing = false
+                folioReaderConfig.scrollDirection = FolioReaderScrollDirection.horizontal
+                folioReaderConfig.enableTTS = false
+                folioReaderConfig.tintColor = UIColor(red:0.55, green:0.70, blue:0.79, alpha:1.0)
+                // Folio Reader initialization.
+                let folioReader = FolioReader()
+                folioReader.presentReader(parentViewController: self.viewController, withEpubPath: filePath, andConfig: folioReaderConfig)
+                let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "OK");
+                self.commandDelegate.send(pluginResult, callbackId: command.callbackId)
+            } else {
+                let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "FILE_NOT_FOUND");
+                self.commandDelegate.send(pluginResult, callbackId: command.callbackId)
+            }
+        } else {
+            let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "FILE_NOT_FOUND");
+            self.commandDelegate.send(pluginResult, callbackId: command.callbackId)
+        }
     }
 }
